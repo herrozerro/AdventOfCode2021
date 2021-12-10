@@ -82,8 +82,11 @@ public async Task<int> p1(bool test = false)
 
 public async Task<int> p2(bool test = false)
 {
+	
+	
 	var lines = await GetLinesFromFile("d09", test);
-
+	
+	var prevgrid = new int[lines.Length, lines[0].Length];
 	var grid = new int[lines.Length, lines[0].Length];
 
 	for (int i = 0; i < lines.Length; i++)
@@ -94,10 +97,10 @@ public async Task<int> p2(bool test = false)
 			grid[i, j] = int.Parse(row[j].ToString()) == 9 ? -1 : 0;
 		}
 	}
-
+prevgrid = (int[,])grid.Clone();
 	//grid.Dump();
 
-	//Go through the entire array, set self to min of neighboors, if 0 use ++basincount
+	//Go through the entire array, set self to min of neighboors, if 0 use ++basincount.  any new region will have a unique lowest number
 	//Do until no changes have happened, multiple passes will eventually get all touching reagions to be the name as the initial number
 	var basincount = 0;
 	var changeHappend = true;
@@ -147,9 +150,12 @@ public async Task<int> p2(bool test = false)
 
 				}
 
-				//grid.Dump();
+				
 			}
 		}
+		//Util.Dif(prevgrid,grid).Dump();
+		prevgrid = (int[,])grid.Clone();
+		
 	}
 
 	//grid.Dump();
@@ -174,8 +180,28 @@ public async Task<int> p2(bool test = false)
 
 		}
 	}
+	
+	var basinscolor = new object[lines.Length, lines[0].Length];
+
+	for (int x = 0; x < grid.GetLength(1); x++)
+	{
+		for (int y = 0; y < grid.GetLength(0); y++)
+		{
+			if (grid[y, x] != -1)
+			{
+				basinscolor[y,x] = Util.WithStyle(grid[y, x],"background-color:blue");
+			}else
+			{
+				basinscolor[y,x] = Util.WithStyle(".","background-color:black");
+			}
+		}
+	}
+	basinscolor.Dump();
+	//basins.OrderByDescending(b => b.Value).Dump();
 	var total = basins.OrderByDescending(b => b.Value).Select(b => b.Value).Take(3).Aggregate(1, (a, b) => a * b);
 	return total;
+	
+	
 }
 
 private bool gridHasZerosLeft(int[,] grid)
