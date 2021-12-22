@@ -19,14 +19,14 @@ async Task Main()
 // You can define other methods, fields, classes and namespaces here
 public async Task<int> p1(bool test = false)
 {
-	var lines = await GetLinesFromFile("d11", test);
+	var lines = await GetLinesFromFile("d20", test);
 	
 	return 0;
 }
 
 public async Task<int> p2(bool test = false)
 {
-	var lines = await GetLinesFromFile("d11", test);
+	var lines = await GetLinesFromFile("d20", test);
 	
 	return 0;
 }
